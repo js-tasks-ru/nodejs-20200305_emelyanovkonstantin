@@ -3,8 +3,7 @@ function sum(a, b) {
     return a + b;
   }else{
     throw new TypeError("Аргумет не является числом");
-  }
- 
+  } 
 }
 
 module.exports = sum;
