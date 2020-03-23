@@ -24,6 +24,7 @@ module.exports = function writeFile(filepath, req, res){
           });
         }
       });
+      
       const sizeStream = new limitSizeStream({limit : 1024*1024});
       sizeStream.
        on('error',(err)=>{        
