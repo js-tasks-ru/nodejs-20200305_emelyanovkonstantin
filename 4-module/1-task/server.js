@@ -3,13 +3,22 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 
+const sendFile = require('./sendFile');
+
 const server = new http.Server();
 
 server.on('request', (req, res) => {
   const pathname = url.parse(req.url).pathname.slice(1);
   console.log(pathname);
 
+  if (pathname.includes('/') || pathname.includes('..')) {
+    res.statusCode = 400;
+    res.end('Nested paths are not allowed');
+    return;
+  }
+
   const filepath = path.join(__dirname, 'files', pathname);
+
   const countSlash = pathname.split('/').length-1;
   console.log(filepath);
   if(countSlash>0){
