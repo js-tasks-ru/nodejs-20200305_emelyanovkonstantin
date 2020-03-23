@@ -3,6 +3,7 @@ const limitSizeStream = require('./LimitSizeStream');
 
 
 module.exports = function writeFile(filepath, req, res){
+
   try{
     if(fs.existsSync(filepath)){
       res.statusCode = 409;
@@ -35,7 +36,7 @@ module.exports = function writeFile(filepath, req, res){
             });
           }
         }
-       })
+       });
       req.pipe(sizeStream);
       sizeStream.pipe(fileStream);  
     }
