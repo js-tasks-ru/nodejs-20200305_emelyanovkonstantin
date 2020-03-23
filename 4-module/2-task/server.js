@@ -19,6 +19,10 @@ server.on('request', (req, res) => {
   switch (req.method) {
     case 'POST':
       writeFile(filepath, req, res);
+
+  switch (req.method) {
+    case 'POST':
+
       break;
 
     default:
