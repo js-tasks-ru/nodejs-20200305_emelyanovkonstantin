@@ -8,8 +8,7 @@ const sendFile = require('./sendFile');
 const server = new http.Server();
 
 server.on('request', (req, res) => {
-  const pathname = url.parse(req.url).pathname.slice(1);
-  console.log(pathname);
+  const pathname = url.parse(req.url).pathname.slice(1);  
 
   if (pathname.includes('/') || pathname.includes('..')) {
     res.statusCode = 400;
@@ -18,9 +17,8 @@ server.on('request', (req, res) => {
   }
 
   const filepath = path.join(__dirname, 'files', pathname);
-
   const countSlash = pathname.split('/').length-1;
-  console.log(filepath);
+  
   if(countSlash>0){
     res.statusCode = 400;
     res.end("Bad Request");
