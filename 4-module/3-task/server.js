@@ -1,6 +1,7 @@
 const url = require('url');
 const http = require('http');
 const path = require('path');
+const deleteFile = require('./deleteFile.js');
 
 const server = new http.Server();
 
@@ -9,9 +10,14 @@ server.on('request', (req, res) => {
 
   const filepath = path.join(__dirname, 'files', pathname);
 
+  if(pathname.includes('/')  || pathname.includes('..')){
+    res.statusCode = 400;
+    res.end("Nested paths are not allowed");
+  }
+
   switch (req.method) {
     case 'DELETE':
-
+      deleteFile(filepath, res)
       break;
 
     default:
