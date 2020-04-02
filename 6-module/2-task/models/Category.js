@@ -17,4 +17,24 @@ const categorySchema = new mongoose.Schema({
   subcategories: [subCategorySchema],
 });
 
+categorySchema.method('transform', function() {
+  var obj = this.toObject();
+
+  //Rename fields
+  obj.id = obj._id;
+  delete obj._id;
+
+  return obj;
+});
+
+subCategorySchema.method('transform', function() {
+  var obj = this.toObject();
+
+  //Rename fields
+  obj.id = obj._id;
+  delete obj._id;
+
+  return obj;
+});
+
 module.exports = connection.model('Category', categorySchema);
