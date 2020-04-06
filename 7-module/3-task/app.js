@@ -21,21 +21,19 @@ app.use(async (ctx, next) => {
     if (err.status) {
       ctx.status = err.status;
       ctx.body = {error: err.message};
-    } else {
-      console.error(err);
+    } else {     
       ctx.status = 500;
       ctx.body = {error: 'Internal server error'};
     }
   }
 });
 
-app.use((ctx, next) => {
+app.use((ctx, next) => {  
   ctx.login = async function(user) {
     const token = uuid();
-
+    await Session.create({token: token, lastVisit: new Date(),user: user});    
     return token;
   };
-
   return next();
 });
 
@@ -44,7 +42,18 @@ const router = new Router({prefix: '/api'});
 router.use(async (ctx, next) => {
   const header = ctx.request.get('Authorization');
   if (!header) return next();
-
+  let token = header.split(' ')[1];
+  if (token){
+     let session = await Session.findOne({token: token}).populate('user');
+     if (!session) {
+      ctx.status = 401;
+      ctx.body = {error: 'Неверный аутентификационный токен'};
+      return;
+    }      
+    ctx.user = session.user;
+    await Session.updateOne({token: token},{lastVisit: new Date()});
+      
+  }
   return next();
 });
 
@@ -53,7 +62,7 @@ router.post('/login', login);
 router.get('/oauth/:provider', oauth);
 router.post('/oauth_callback', handleMongooseValidationError, oauthCallback);
 
-router.get('/me', me);
+router.get('/me', mustBeAuthenticated, me);
 
 app.use(router.routes());
 
