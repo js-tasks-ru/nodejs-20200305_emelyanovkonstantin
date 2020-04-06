@@ -11,18 +11,4 @@ module.exports = async function authenticate(strategy, email, displayName, done)
     }
   }); 
   return done(null, user);
-
-
-/*
-  let user = await User.findOneAndUpdate({email: email}, {},{
-    new: true,
-    upsert: true
-  }, function(err) {
-    if(err){
-      console.log(err);
-      return done(err);
-    }    
-  });
-  return done(null, user);
-  */
 };
